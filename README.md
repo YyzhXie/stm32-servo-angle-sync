@@ -22,6 +22,7 @@ core/       与平台无关的角度映射、协议、滤波和超时保护
 firmware/   STM32 HAL/CubeMX 风格主机/从机应用代码
 tests/      PC 端单元测试和长时间仿真
 docs/       CubeMX 配置、接线和演示清单
+stm32_mdk_project/ 已接入 Keil MDK 的 STM32F103C8T6 工程，可直接打开编译下载
 ```
 
 ## PC 离线构建与测试
@@ -44,6 +45,15 @@ $env:PATH="D:\CLion 2026.1.2\bin\mingw\bin;$env:PATH"
 也可以直接用 CLion 打开本目录，选择 bundled MinGW/Ninja 工具链后运行测试目标。
 
 ## STM32 使用方式
+
+若希望直接上板测试，优先打开：
+
+```text
+stm32_mdk_project/MDK-ARM/1.uvprojx
+```
+
+该工程已经接入核心逻辑、ADC、USART1、TIM3 PWM、CAN1、PC13 LED，并在本机通过 Keil
+Arm Compiler 6 批量编译验证，生成过 `0 Error(s), 0 Warning(s)` 的固件。
 
 1. 分别为主机和从机建立 STM32CubeMX 或 STM32CubeIDE 工程，芯片选择 `STM32F103C8T6`。
 2. 按 [CubeMX 配置建议](docs/cubemx_setup.md) 配置 ADC、UART、CAN、TIM3 PWM 和 LED。
