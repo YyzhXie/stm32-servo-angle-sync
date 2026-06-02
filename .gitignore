@@ -1,0 +1,27 @@
+# Build outputs
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Testing/
+
+# Compiled files
+*.o
+*.obj
+*.elf
+*.hex
+*.bin
+*.map
+*.exe
+*.dll
+*.lib
+*.a
+
+# IDE and OS files
+.idea/
+.vscode/
+.vs/
+*.swp
+*.swo
+Thumbs.db
+Desktop.ini
