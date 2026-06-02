@@ -26,6 +26,7 @@ void app_master_uart_task(uint32_t now_ms)
     }
     s_next_send_ms = now_ms + APP_UART_SEND_PERIOD_MS;
 
+    /* Sample one ADC value every 50 ms, then smooth it before transmission. */
     HAL_ADC_Start(&hadc1);
     if (HAL_ADC_PollForConversion(&hadc1, 5u) != HAL_OK) {
         app_status_led_set_error(1u);
@@ -42,6 +43,7 @@ void app_master_uart_task(uint32_t now_ms)
     uint8_t frame[ANGLE_FRAME_SIZE];
     const size_t length = angle_frame_encode(s_sequence++, angle_deg10, frame);
 
+    /* The UART required task is one-way: master TX PA9 -> slave RX PA10. */
     if (HAL_UART_Transmit(&huart1, frame, (uint16_t)length, 10u) == HAL_OK) {
         HAL_GPIO_TogglePin(APP_STATUS_LED_GPIO_PORT, APP_STATUS_LED_PIN);
     } else {

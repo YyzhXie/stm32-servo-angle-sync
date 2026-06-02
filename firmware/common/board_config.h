@@ -17,7 +17,10 @@
 
 #define APP_SERVO_TIM_CHANNEL TIM_CHANNEL_1
 
-/* With TIM3 configured to a 1 MHz counter, CCR value equals pulse width in us. */
+/*
+ * With TIM3 configured to a 1 MHz counter, CCR value equals pulse width in us.
+ * This is why servo_pulse_us_from_angle() can be written directly to CCR.
+ */
 static inline void app_servo_write_us(TIM_HandleTypeDef *htim, uint16_t pulse_us)
 {
     __HAL_TIM_SET_COMPARE(htim, APP_SERVO_TIM_CHANNEL, pulse_us);

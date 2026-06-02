@@ -9,6 +9,7 @@ extern "C" {
 
 #define MOVING_AVERAGE_MAX_WINDOW 16u
 
+/* Small fixed-size moving average for ADC smoothing without dynamic memory. */
 typedef struct {
     uint16_t samples[MOVING_AVERAGE_MAX_WINDOW];
     uint32_t sum;

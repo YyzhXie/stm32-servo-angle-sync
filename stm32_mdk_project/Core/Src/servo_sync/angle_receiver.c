@@ -26,12 +26,14 @@ void angle_receiver_accept(angle_receiver_t *receiver,
 uint16_t angle_receiver_poll(angle_receiver_t *receiver, uint32_t now_ms)
 {
     if (!receiver->has_frame) {
+        /* Before the first valid frame, keep the servo at the safe center. */
         receiver->timed_out = true;
         receiver->current_angle_deg10 = receiver->safe_angle_deg10;
         return receiver->current_angle_deg10;
     }
 
     if ((uint32_t)(now_ms - receiver->last_rx_ms) > receiver->timeout_ms) {
+        /* Do not keep driving the last command after communication is lost. */
         receiver->timed_out = true;
         receiver->current_angle_deg10 = receiver->safe_angle_deg10;
     }

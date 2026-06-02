@@ -24,6 +24,8 @@ uint16_t servo_pulse_us_from_angle(uint16_t angle_deg10)
 {
     const uint16_t clamped = angle_clamp_deg10(angle_deg10);
     const uint32_t span = SERVO_SYNC_PWM_MAX_US - SERVO_SYNC_PWM_MIN_US;
+
+    /* Rounded linear mapping: 0.0..180.0 degrees -> 500..2500 us. */
     const uint32_t numerator =
         (uint32_t)clamped * span + (SERVO_SYNC_ANGLE_MAX_DEG10 / 2u);
     return (uint16_t)(SERVO_SYNC_PWM_MIN_US + numerator / SERVO_SYNC_ANGLE_MAX_DEG10);

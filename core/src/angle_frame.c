@@ -9,6 +9,7 @@ uint8_t angle_crc8(const uint8_t *data, size_t length)
     for (size_t i = 0u; i < length; ++i) {
         crc ^= data[i];
         for (uint8_t bit = 0u; bit < 8u; ++bit) {
+            /* Polynomial 0x07 keeps the implementation small for STM32F103. */
             if ((crc & 0x80u) != 0u) {
                 crc = (uint8_t)((crc << 1u) ^ 0x07u);
             } else {
@@ -51,6 +52,11 @@ void angle_frame_decoder_init(angle_frame_decoder_t *decoder)
 static void decoder_restart_with_byte(angle_frame_decoder_t *decoder, uint8_t byte)
 {
     decoder->index = 0u;
+
+    /*
+     * If the byte that broke the current frame is also a possible first header
+     * byte, keep it. This makes the stream parser recover from split frames.
+     */
     if (byte == ANGLE_FRAME_HEAD0) {
         decoder->buffer[0] = byte;
         decoder->index = 1u;
@@ -109,6 +115,7 @@ void angle_can_encode_payload(uint8_t sequence,
 {
     const uint16_t clamped = angle_clamp_deg10(angle_deg10);
 
+    /* CAN already has an ID field, so the payload only carries live data. */
     out[0] = sequence;
     out[1] = (uint8_t)(clamped & 0xFFu);
     out[2] = (uint8_t)((clamped >> 8u) & 0xFFu);

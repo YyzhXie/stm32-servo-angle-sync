@@ -8,6 +8,13 @@ BOARD_MASTER + LINK_UART
 
 也就是“主机通过 PA0 采集电位器，通过 USART1/PA9 发送角度”的必做版本。
 
+## 当前验证状态
+
+- 已修复 µVision 曾提示的 `Cannot read project file ... 1.uvprojx` 工程文件读取问题。
+- 已用 Keil MDK / Arm Compiler 6 批量编译通过，结果为 `0 Error(s), 0 Warning(s)`。
+- 由于当前没有办法立刻插入硬件，尚未完成真实电位器、舵机和 CAN 总线闭环测试。
+- 上板时建议先验证 UART 必做链路，再验证 CAN 进阶链路。
+
 ## 切换主机/从机与 UART/CAN
 
 修改 `Core/Inc/app_config.h`：

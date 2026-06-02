@@ -17,6 +17,10 @@ typedef struct {
     bool timed_out;
 } angle_receiver_t;
 
+/*
+ * Receiver-side safety state. If no valid frame is received within timeout_ms,
+ * angle_receiver_poll() returns safe_angle_deg10 instead of the stale angle.
+ */
 void angle_receiver_init(angle_receiver_t *receiver,
                          uint32_t timeout_ms,
                          uint16_t safe_angle_deg10);

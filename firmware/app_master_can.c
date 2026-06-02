@@ -46,6 +46,7 @@ void app_master_can_task(uint32_t now_ms)
     uint8_t payload[ANGLE_CAN_DLC];
     angle_can_encode_payload(s_sequence++, angle_deg10, payload);
 
+    /* CAN uses the arbitration ID for filtering and keeps the payload compact. */
     CAN_TxHeaderTypeDef header;
     header.StdId = ANGLE_CAN_STD_ID;
     header.ExtId = 0u;

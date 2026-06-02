@@ -3,6 +3,10 @@
 目标芯片为 `STM32F103C8T6`。本目录代码按 HAL 工程写法组织，适合复制到 CubeMX
 生成的工程中使用。
 
+如果只是回去测试现成工程，优先使用 `stm32_mdk_project/MDK-ARM/1.uvprojx`。该工程已经手工接入
+ADC、USART1、TIM3 PWM、CAN1 和 PC13 LED，并通过 Keil 编译。只有在需要重新生成 CubeMX 工程时，
+才按本页重新配置外设。
+
 ## 主机 UART 必做版
 
 | 外设 | 配置 |

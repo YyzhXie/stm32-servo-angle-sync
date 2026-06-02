@@ -2,6 +2,9 @@
 
 由于当前无法立刻插入硬件，建议正式录制前按下面顺序排查。
 
+若使用仓库内已集成工程，请直接打开 `stm32_mdk_project/MDK-ARM/1.uvprojx`。默认宏为
+`BOARD_MASTER + LINK_UART`，烧录从机或切换 CAN 时修改 `Core/Inc/app_config.h`。
+
 ## UART 必做演示
 
 1. 只给主机上电，用串口工具确认每 `50ms` 有一帧数据输出。
@@ -26,3 +29,4 @@
 | 角度方向反了 | 交换电位器 3.3V/GND 两端，或在代码中用 `1800 - angle` |
 | UART 无反应 | 主机 `PA9` 是否接从机 `PA10`，波特率是否都是 9600 |
 | CAN 无反应 | CANH/CANL、TJA1050 供电、波特率、滤波 ID `0x321` |
+| Keil 打不开工程 | 确认打开的是 `stm32_mdk_project/MDK-ARM/1.uvprojx`，不要直接用空 `.ioc` 重新生成覆盖 |

@@ -30,6 +30,7 @@ void app_slave_uart_init(void)
 
 void app_slave_uart_task(uint32_t now_ms)
 {
+    /* Polling only handles timeout safety; byte reception itself is interrupt-driven. */
     const uint16_t angle = angle_receiver_poll(&s_receiver, now_ms);
     servo_apply_angle(angle);
     app_status_led_set_error(s_receiver.timed_out ? 1u : 0u);
@@ -41,6 +42,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         angle_frame_t frame;
         if (angle_frame_decoder_push(&s_decoder, s_rx_byte, &frame) ==
             ANGLE_FRAME_OK) {
+            /* Only CRC-checked frames update the receiver and servo command. */
             angle_receiver_accept(&s_receiver, frame.angle_deg10, HAL_GetTick());
             servo_apply_angle(frame.angle_deg10);
         }

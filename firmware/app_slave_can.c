@@ -18,6 +18,7 @@ static void configure_can_filter(void)
 {
     CAN_FilterTypeDef filter;
 
+    /* Accept only standard data frames with ID 0x321 for the angle command. */
     filter.FilterBank = 0u;
     filter.FilterMode = CAN_FILTERMODE_IDMASK;
     filter.FilterScale = CAN_FILTERSCALE_32BIT;
@@ -47,6 +48,7 @@ void app_slave_can_init(void)
 
 void app_slave_can_task(uint32_t now_ms)
 {
+    /* Same safety rule as UART: communication loss returns the servo to 90.0 deg. */
     const uint16_t angle = angle_receiver_poll(&s_receiver, now_ms);
     servo_apply_angle(angle);
     app_status_led_set_error(s_receiver.timed_out ? 1u : 0u);

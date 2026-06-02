@@ -16,6 +16,10 @@ extern "C" {
 #define ANGLE_CAN_STD_ID 0x321u
 #define ANGLE_CAN_DLC 4u
 
+/*
+ * Angle transport unit shared by UART and CAN.
+ * angle_deg10 is clamped to 0..1800 before transmission.
+ */
 typedef struct {
     uint8_t sequence;
     uint16_t angle_deg10;
@@ -36,18 +40,22 @@ typedef struct {
     uint32_t sync_errors;
 } angle_frame_decoder_t;
 
+/* CRC-8/ATM polynomial 0x07, used to reject corrupted UART/CAN angle data. */
 uint8_t angle_crc8(const uint8_t *data, size_t length);
 
+/* Encode the required UART frame: A5 5A version sequence angle_l angle_h crc. */
 size_t angle_frame_encode(uint8_t sequence,
                           uint16_t angle_deg10,
                           uint8_t out[ANGLE_FRAME_SIZE]);
 
 void angle_frame_decoder_init(angle_frame_decoder_t *decoder);
 
+/* Push one UART byte at a time; the decoder resynchronizes after bad bytes. */
 angle_frame_status_t angle_frame_decoder_push(angle_frame_decoder_t *decoder,
                                               uint8_t byte,
                                               angle_frame_t *out_frame);
 
+/* Encode/decode the optional CAN payload carried by standard frame ID 0x321. */
 void angle_can_encode_payload(uint8_t sequence,
                               uint16_t angle_deg10,
                               uint8_t out[ANGLE_CAN_DLC]);
