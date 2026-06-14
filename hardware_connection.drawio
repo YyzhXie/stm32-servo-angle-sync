@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net" modified="2026-06-14T14:40:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="hardware-connection" name="STM32 Hardware Connection">
+    <mxGraphModel dx="1280" dy="760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="760" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="STM32 主从舵机角度同步硬件连接图&#xa;BOARD_MASTER + LINK_UART / BOARD_SLAVE + LINK_UART" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="270" y="25" width="740" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="pot" value="10K 电位器&#xa;左脚：GND&#xa;中间脚：PA0&#xa;右脚：3.3V" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#0891b2;fontSize=16;fontStyle=1;spacing=10" vertex="1" parent="1">
+          <mxGeometry x="70" y="155" width="220" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="master" value="主板 STM32F103C8T6&#xa;BOARD_MASTER&#xa;ADC：PA0&#xa;UART TX：PA9&#xa;BOOT0：0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#2563eb;fontSize=16;fontStyle=1;spacing=12" vertex="1" parent="1">
+          <mxGeometry x="410" y="120" width="260" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="slave" value="从板 STM32F103C8T6&#xa;BOARD_SLAVE&#xa;UART RX：PA10&#xa;PWM：PA6 / TIM3_CH1&#xa;PC13：超时指示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;fontSize=16;fontStyle=1;spacing=12" vertex="1" parent="1">
+          <mxGeometry x="795" y="120" width="260" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="servo" value="SG90 舵机&#xa;红线：5V&#xa;棕/黑：GND&#xa;黄/橙：信号" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontSize=16;fontStyle=1;spacing=10" vertex="1" parent="1">
+          <mxGeometry x="845" y="475" width="230" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="power" value="外部 5V 电源&#xa;5V / GND" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#dc2626;fontSize=16;fontStyle=1;spacing=10" vertex="1" parent="1">
+          <mxGeometry x="520" y="510" width="220" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="stlink" value="ST-Link&#xa;SWDIO / SWCLK&#xa;GND / 3.3V / NRST" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=16;fontStyle=1;spacing=10" vertex="1" parent="1">
+          <mxGeometry x="145" y="500" width="230" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="adc" value="PA0 ADC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=14" edge="1" parent="1" source="pot" target="master">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="uart" value="PA9 TX → PA10 RX&#xa;9600 8N1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=14" edge="1" parent="1" source="master" target="slave">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gnd1" value="主从共地" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6b7280;strokeWidth=3;dashed=1;endArrow=none;fontSize=14" edge="1" parent="1" source="master" target="slave">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pwm" value="PA6 PWM / 50Hz" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#16a34a;strokeWidth=3;endArrow=block;endFill=1;fontSize=14" edge="1" parent="1" source="slave" target="servo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pwr" value="5V" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#dc2626;strokeWidth=3;endArrow=block;endFill=1;fontSize=14" edge="1" parent="1" source="power" target="servo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="gnd2" value="舵机电源 GND 与从板 GND 共地" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6b7280;strokeWidth=3;dashed=1;endArrow=none;fontSize=14" edge="1" parent="1" source="power" target="slave">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="prog1" value="烧录主板" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7c3aed;strokeWidth=2;dashed=1;endArrow=block;endFill=1;fontSize=14" edge="1" parent="1" source="stlink" target="master">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="prog2" value="烧录从板" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7c3aed;strokeWidth=2;dashed=1;endArrow=block;endFill=1;fontSize=14" edge="1" parent="1" source="stlink" target="slave">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

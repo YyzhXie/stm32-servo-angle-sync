@@ -57,7 +57,8 @@ void app_master_can_task(uint32_t now_ms)
 
     uint32_t mailbox;
     if (HAL_CAN_AddTxMessage(&hcan, &header, payload, &mailbox) == HAL_OK) {
-        HAL_GPIO_TogglePin(APP_STATUS_LED_GPIO_PORT, APP_STATUS_LED_PIN);
+        /* Like UART master mode, PC13 is reserved for error indication. */
+        app_status_led_set_error(0u);
     } else {
         app_status_led_set_error(1u);
     }

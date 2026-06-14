@@ -17,6 +17,7 @@ void angle_receiver_accept(angle_receiver_t *receiver,
                            uint16_t angle_deg10,
                            uint32_t now_ms)
 {
+    /* A valid frame clears the safety timeout and becomes the new command. */
     receiver->current_angle_deg10 = angle_clamp_deg10(angle_deg10);
     receiver->last_rx_ms = now_ms;
     receiver->has_frame = true;
