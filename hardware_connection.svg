@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1f2937"/>
+    </marker>
+    <style>
+      .title { font: 700 30px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #111827; }
+      .subtitle { font: 18px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #4b5563; }
+      .box-title { font: 700 20px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #111827; }
+      .box-text { font: 16px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #374151; }
+      .wire { fill: none; stroke: #1f2937; stroke-width: 3; marker-end: url(#arrow); }
+      .gnd { fill: none; stroke: #6b7280; stroke-width: 3; stroke-dasharray: 9 7; }
+      .power { fill: none; stroke: #dc2626; stroke-width: 3; marker-end: url(#arrow); }
+      .signal { fill: none; stroke: #2563eb; stroke-width: 3; marker-end: url(#arrow); }
+      .pwm { fill: none; stroke: #16a34a; stroke-width: 3; marker-end: url(#arrow); }
+      .program { fill: none; stroke: #7c3aed; stroke-width: 2.5; stroke-dasharray: 8 6; marker-end: url(#arrow); }
+      .label { font: 15px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #111827; }
+      .small { font: 14px "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; fill: #4b5563; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="760" fill="#f8fafc"/>
+  <text x="640" y="48" text-anchor="middle" class="title">STM32 主从舵机角度同步硬件连接图</text>
+  <text x="640" y="78" text-anchor="middle" class="subtitle">BOARD_MASTER + LINK_UART / BOARD_SLAVE + LINK_UART</text>
+
+  <rect x="70" y="155" width="220" height="145" rx="12" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+  <text x="180" y="190" text-anchor="middle" class="box-title">10K 电位器</text>
+  <text x="95" y="224" class="box-text">左脚：GND</text>
+  <text x="95" y="252" class="box-text">中间脚：PA0</text>
+  <text x="95" y="280" class="box-text">右脚：3.3V</text>
+
+  <rect x="410" y="120" width="260" height="210" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="540" y="155" text-anchor="middle" class="box-title">主板 STM32F103C8T6</text>
+  <text x="440" y="192" class="box-text">程序：BOARD_MASTER</text>
+  <text x="440" y="220" class="box-text">ADC：PA0</text>
+  <text x="440" y="248" class="box-text">UART TX：PA9</text>
+  <text x="440" y="276" class="box-text">GND：共地</text>
+  <text x="440" y="304" class="box-text">BOOT0：0</text>
+
+  <rect x="795" y="120" width="260" height="210" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="925" y="155" text-anchor="middle" class="box-title">从板 STM32F103C8T6</text>
+  <text x="825" y="192" class="box-text">程序：BOARD_SLAVE</text>
+  <text x="825" y="220" class="box-text">UART RX：PA10</text>
+  <text x="825" y="248" class="box-text">PWM：PA6 / TIM3_CH1</text>
+  <text x="825" y="276" class="box-text">GND：共地</text>
+  <text x="825" y="304" class="box-text">PC13：超时指示</text>
+
+  <rect x="845" y="475" width="230" height="135" rx="12" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="960" y="510" text-anchor="middle" class="box-title">SG90 舵机</text>
+  <text x="875" y="545" class="box-text">红线：5V</text>
+  <text x="875" y="573" class="box-text">棕/黑：GND</text>
+  <text x="875" y="601" class="box-text">黄/橙：信号</text>
+
+  <rect x="520" y="510" width="220" height="100" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="630" y="545" text-anchor="middle" class="box-title">外部 5V 电源</text>
+  <text x="555" y="580" class="box-text">5V / GND</text>
+
+  <rect x="145" y="500" width="230" height="120" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="260" y="535" text-anchor="middle" class="box-title">ST-Link</text>
+  <text x="175" y="570" class="box-text">SWDIO / SWCLK</text>
+  <text x="175" y="598" class="box-text">GND / 3.3V / NRST</text>
+
+  <path d="M290 252 C345 252 355 220 410 220" class="signal"/>
+  <text x="346" y="238" text-anchor="middle" class="label">PA0 ADC</text>
+
+  <path d="M670 248 C725 248 740 220 795 220" class="signal"/>
+  <text x="733" y="236" text-anchor="middle" class="label">PA9 TX → PA10 RX</text>
+  <text x="733" y="258" text-anchor="middle" class="small">9600 8N1</text>
+
+  <path d="M670 276 C720 365 745 365 795 276" class="gnd"/>
+  <text x="733" y="362" text-anchor="middle" class="label">主从共地</text>
+
+  <path d="M925 330 L940 475" class="pwm"/>
+  <text x="975" y="405" class="label">PA6 PWM</text>
+  <text x="975" y="427" class="small">50Hz</text>
+
+  <path d="M740 545 L845 545" class="power"/>
+  <text x="792" y="530" text-anchor="middle" class="label">5V</text>
+
+  <path d="M740 580 C780 630 835 630 875 573" class="gnd"/>
+  <text x="805" y="658" text-anchor="middle" class="label">舵机电源 GND 与从板 GND 共地</text>
+
+  <path d="M375 548 C430 520 460 440 505 330" class="program"/>
+  <text x="420" y="485" class="label">烧录主板</text>
+  <path d="M375 585 C565 700 840 665 930 330" class="program"/>
+  <text x="575" y="688" class="label">烧录从板</text>
+
+  <rect x="70" y="680" width="1140" height="42" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="92" y="707" class="small">关键：舵机使用外部 5V；主板、从板、舵机电源必须共地；烧录时 BOOT0 保持 0。</text>
+</svg>
