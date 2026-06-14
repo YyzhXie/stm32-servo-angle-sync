@@ -13,6 +13,7 @@ static uint8_t s_rx_byte;
 
 static void servo_apply_angle(uint16_t angle_deg10)
 {
+    /* The timer counter runs at 1 MHz, so pulse_us maps directly to CCR. */
     app_servo_write_us(&htim3, servo_pulse_us_from_angle(angle_deg10));
 }
 
@@ -25,6 +26,10 @@ void app_slave_uart_init(void)
     servo_apply_angle(SERVO_SYNC_ANGLE_SAFE_DEG10);
     app_status_led_set_error(0u);
 
+    /*
+     * Reception is byte-by-byte so the frame decoder can resynchronize quickly
+     * after wiring noise, reset timing, or a partially received frame.
+     */
     HAL_UART_Receive_IT(&huart1, &s_rx_byte, 1u);
 }
 
@@ -46,6 +51,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             angle_receiver_accept(&s_receiver, frame.angle_deg10, HAL_GetTick());
             servo_apply_angle(frame.angle_deg10);
         }
+        /* Re-arm the interrupt for the next byte before returning to the loop. */
         HAL_UART_Receive_IT(&huart1, &s_rx_byte, 1u);
     }
 }

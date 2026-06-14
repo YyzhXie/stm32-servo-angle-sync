@@ -1,5 +1,7 @@
 # 接线说明
 
+完整硬件连接图见 [硬件连接图](hardware_connection.md)。
+
 ## UART 必做版
 
 | 信号 | 主机 STM32F103C8T6 | 从机 STM32F103C8T6 | 说明 |

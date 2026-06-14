@@ -13,6 +13,7 @@ static uint8_t s_sequence;
 
 void app_master_uart_init(void)
 {
+    /* Master owns the potentiometer input and sends one debounced angle stream. */
     moving_average_init(&s_adc_filter, APP_ADC_FILTER_WINDOW);
     s_next_send_ms = 0u;
     s_sequence = 0u;
@@ -41,11 +42,16 @@ void app_master_uart_task(uint32_t now_ms)
     const uint16_t angle_deg10 = angle_from_adc(filtered_adc);
 
     uint8_t frame[ANGLE_FRAME_SIZE];
+    /*
+     * The sequence byte is not required for motion control, but it helps when
+     * debugging dropped or duplicated UART frames with a logic analyzer.
+     */
     const size_t length = angle_frame_encode(s_sequence++, angle_deg10, frame);
 
     /* The UART required task is one-way: master TX PA9 -> slave RX PA10. */
     if (HAL_UART_Transmit(&huart1, frame, (uint16_t)length, 10u) == HAL_OK) {
-        HAL_GPIO_TogglePin(APP_STATUS_LED_GPIO_PORT, APP_STATUS_LED_PIN);
+        /* On the master board, PC13 is treated as an error indicator only. */
+        app_status_led_set_error(0u);
     } else {
         app_status_led_set_error(1u);
     }

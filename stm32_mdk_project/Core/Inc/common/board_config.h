@@ -15,6 +15,10 @@
 #define APP_STATUS_LED_GPIO_PORT GPIOC
 #define APP_STATUS_LED_PIN GPIO_PIN_13
 
+/*
+ * Production wiring uses TIM3_CH1 on PA6 for the SG90 signal pin. Temporary
+ * diagnostics may use other channels, but the normal slave firmware stays here.
+ */
 #define APP_SERVO_TIM_CHANNEL TIM_CHANNEL_1
 
 /*
@@ -28,6 +32,7 @@ static inline void app_servo_write_us(TIM_HandleTypeDef *htim, uint16_t pulse_us
 
 static inline void app_status_led_set_error(uint8_t error)
 {
+    /* Blue Pill PC13 LED is active-low: RESET lights it, SET turns it off. */
     HAL_GPIO_WritePin(APP_STATUS_LED_GPIO_PORT,
                       APP_STATUS_LED_PIN,
                       error ? GPIO_PIN_RESET : GPIO_PIN_SET);
